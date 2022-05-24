@@ -1,10 +1,13 @@
-class Input {
+class Input(private var input:String) {
 
-  def getValue(): Unit ={
+  def settingValue(string: String):Unit={
+    input=string
+  }
 
-  }
-  def setValue(): Unit = {
-  }
+  def getValue(): String ={
+    return input
+    }
+
 
 
 }

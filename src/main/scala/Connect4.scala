@@ -1,9 +1,9 @@
 class Connect4 {
-  def Drawer(controller: State => State): Unit ={
+  def Drawer(controller: State ): Unit ={
 
 
   }
-  def Controller(state: State,input:Input,player:Int ): State ={
+  def Controller(state: State,input:Input): State ={
     state
   }
 }
