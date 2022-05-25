@@ -5,7 +5,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.TableColumn._
 import scalafx.scene.control.{Button, Label, TableColumn, TableView, TextField}
 import scalafx.event.{EventHandler, EventType}
-import scalafx.scene.input.KeyEvent
+import scalafx.scene.input.{KeyEvent, MouseEvent}
 
 import scala.math.abs
 import scala.util.control.Breaks.{break, breakable};
@@ -48,9 +48,9 @@ class chess{
   var w_attack_piece_rank = 0; var w_attack_piece_file = 0
   var b_attack_piece_rank = 0; var b_attack_piece_file = 0
   var W_rank = 0; var W_file = 4; var B_rank = 7; var B_file = 4
-  def Drawer(controller: State ): Unit ={
+  def Drawer(controller: State ): Array[Array[String]] ={
 
-    /*print("    A   B  C   D  E   F  G   H "); //names of the columns on the top
+    print("    A   B  C   D  E   F  G   H "); //names of the columns on the top
     for( i<- 0 to 7 ) {
       println("")
       print( i+"   ")
@@ -58,8 +58,8 @@ class chess{
         print(chess_printer(i)(j)+"  ")
       }
     }
-    println("\n")*/
-    ChessGui.start()
+    println("\n")
+chess_printer
   }
 
 
@@ -71,6 +71,7 @@ class chess{
       state
     }
     else {
+      println(input.getValue())
       val Input: Array[String] = input.getValue().split("")
       var action: Boolean = true
       val rank_1:Int = Input(0).toInt
@@ -569,144 +570,4 @@ class chess{
     else true
   }
 
-}
-object ChessGui extends JFXApp3 {
-
-  val col = ObservableBuffer[piece]()
-  val R:String = Character.toString(9814)
-  val N:String = Character.toString(9816)
-  val B:String = Character.toString(9815)
-  val Q:String = Character.toString(9813)
-  val K:String = Character.toString(9812)
-  val P:String = Character.toString(9817)
-  val r:String = Character.toString(9820)
-  val n:String = Character.toString(9822)
-  val b:String = Character.toString(9821)
-  val q:String = Character.toString(9819)
-  val k:String = Character.toString(9818)
-  val p:String = Character.toString(9823)
-
-  val s:String = " " //space
-
-  class piece(s0:String,s1 : String,s2:String,s3:String,s4:String,s5:String,s6:String,s7:String,s8:String) {
-    val a0 = new StringProperty(this, "piece", s0)
-    val a1 = new StringProperty(this, "piece", s1)
-    val a2 = new StringProperty(this, "piece", s2)
-    val a3 = new StringProperty(this, "piece", s3)
-    val a4 = new StringProperty(this, "piece", s4)
-    val a5 = new StringProperty(this, "piece", s5)
-    val a6 = new StringProperty(this, "piece", s6)
-    val a7 = new StringProperty(this, "piece", s7)
-    val a8 = new StringProperty(this, "piece", s8)
-  }
-  var Input=new Input(null);
-
-  val chess_board = ObservableBuffer[piece](
-    new piece(" ","1", "2", "3", "4", "5", "6", "7", "8"),
-    new piece("1", R, N, B, Q, K, B, N, R),
-    new piece("2", P, P, P, P, P, P, P, P),
-    new piece("3", s, s, s, s, s, s, s, s),
-    new piece("4", s, s, s, s, s, s, s, s),
-    new piece("5", s, s, s, s, s, s, s, s),
-    new piece("6", s, s, s, s, s, s, s, s),
-    new piece("7", p, p, p, p, p, p, p, p),
-    new piece("8", r, n, b, q, k, b, n, r))
-  override def start(): Unit = {
-
-    stage = new JFXApp3.PrimaryStage {
-      title = "Simple TableView"
-      scene = new Scene(450,240) {
-        val app = new TableView[piece](chess_board) {
-
-          columns ++= List(
-            new TableColumn[piece, String] {
-
-
-              cellValueFactory = {
-
-                _.value.a0
-
-              }
-              prefWidth = 50
-            },
-            new TableColumn[piece, String] {
-
-              cellValueFactory = {
-                _.value.a1
-              }
-
-
-              prefWidth = 50
-
-
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a2
-              }
-              prefWidth = 50
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a3
-              }
-              prefWidth = 50
-
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a4
-              }
-              prefWidth = 50
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a5
-              }
-              prefWidth = 50
-
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a6
-              }
-              prefWidth = 50
-            },
-            new TableColumn[piece, String] {
-              cellValueFactory = {
-                _.value.a7
-              }
-              prefWidth = 50
-
-
-            },
-            new TableColumn[piece, String] {
-
-              cellValueFactory = {
-                _.value.a8
-              }
-              prefWidth = 50
-
-            }
-          )
-
-
-        }
-        val label = new Label("Input")
-        label.layoutX = 40
-        label.layoutY = app.getHeight
-        val input = new TextField()
-        input.layoutX = 80
-        input.layoutY = app.getHeight
-        input.setMinWidth(10)
-        input.setMinHeight(10)
-        val ok = new Button("Apply")
-        ok.layoutX = 230
-        ok.layoutY = app.getHeight
-        ok.onMouseClicked={(e)=>{Input.settingValue(input.getText())}}
-        content = List(app, label,input,ok)
-      }
-
-    }
-  }
 }
