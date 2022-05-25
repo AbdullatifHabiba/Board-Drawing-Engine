@@ -1,10 +1,11 @@
-import Test.stage
 import scalafx.application.JFXApp3
 import scalafx.beans.property.{IntegerProperty, ObjectProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
 import scalafx.scene.Scene
 import scalafx.scene.control.TableColumn._
 import scalafx.scene.control.{Button, Label, TableColumn, TableView, TextField}
+import scalafx.event.{EventHandler, EventType}
+import scalafx.scene.input.KeyEvent
 
 import scala.math.abs
 import scala.util.control.Breaks.{break, breakable};
