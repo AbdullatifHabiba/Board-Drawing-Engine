@@ -23,8 +23,8 @@ class Checkers {
 
   var board: Array[Array[String]] = Array.ofDim[String](8, 8)
 
-  def Drawer(controller: State): Array[Array[String]] = {
-    board = controller.board
+  def Drawer(controller: (State,Input)=>State, state: State,input:Input): Array[Array[String]]  = {
+    board = controller.apply(state,input).board;
     var i = 0 to 7
     i.foreach(i => print(board(0)(i)))
     println("")

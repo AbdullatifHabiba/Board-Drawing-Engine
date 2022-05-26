@@ -24,38 +24,41 @@ class chess{
     Array("i", "j", "i", "j", "i", "j", "i","j")
   )
   var chess_printer:Array[Array[String]] =  Array.ofDim[String](8,8)
-  def printer (): Unit ={
-    for (i<-0 to 7) {
-      for (j <- 0 to 7) {
-        chess_board(i)(j) match {
-          case "R" => chess_printer(i)(j) = Character.toString(9814)
-          case "N" => chess_printer(i)(j)  = Character.toString(9816)
-          case "B" => chess_printer(i)(j)  = Character.toString(9815)
-          case "Q" => chess_printer(i)(j)  = Character.toString(9813)
-          case "K" => chess_printer(i)(j)  = Character.toString(9812)
-          case "P" => chess_printer(i)(j)  = Character.toString(9817)
-          case "r" => chess_printer(i)(j)  = Character.toString(9820)
-          case "n" => chess_printer(i)(j)  = Character.toString(9822)
-          case "b" => chess_printer(i)(j)  = Character.toString(9821)
-          case "q" => chess_printer(i)(j)  = Character.toString(9819)
-          case "k" => chess_printer(i)(j)  = Character.toString(9818)
-          case "p" => chess_printer(i)(j)  = Character.toString(9823)
-          case   _ => chess_printer(i)(j)  = "  "
+  def printer (char:String): String ={
+             var  sh:String=" ";
+        char match {
+          case "R" =>  sh=Character.toString(9814)
+          case "N" =>  sh=Character.toString(9816)
+          case "B" =>  sh=Character.toString(9815)
+          case "Q" =>  sh= Character.toString(9813)
+          case "K" =>  sh=Character.toString(9812)
+          case "P" =>  sh=Character.toString(9817)
+          case "r" =>  sh=Character.toString(9820)
+          case "n" =>  sh=Character.toString(9822)
+          case "b" =>  sh=Character.toString(9821)
+          case "q" =>  sh=Character.toString(9819)
+          case "k" =>  sh=Character.toString(9818)
+          case "p" =>  sh=Character.toString(9823)
+          case   _ =>  sh="  "
         }
+    //print(sh)
+    sh
       }
-    }
-  }
+
+
   var w_attack_piece_rank = 0; var w_attack_piece_file = 0
   var b_attack_piece_rank = 0; var b_attack_piece_file = 0
   var W_rank = 0; var W_file = 4; var B_rank = 7; var B_file = 4
-  def Drawer(controller: State ): Array[Array[String]] ={
-
+  def Drawer(controller: (State,Input)=>State, state: State,input:Input): Array[Array[String]] ={
+   var chess_printer=controller.apply(state,input).board;
     print("    A   B  C   D  E   F  G   H "); //names of the columns on the top
     for( i<- 0 to 7 ) {
       println("")
       print( i+"   ")
       for(j<- 0 to 7 ) {
-        print(chess_printer(i)(j)+"  ")
+            chess_printer(i)(j)=printer(chess_printer(i)(j))
+                print(chess_printer(i)(j)+"  ")
+
       }
     }
     println("\n")
@@ -65,7 +68,7 @@ chess_printer
 
   //////////////////////////////////// Control Function ///////////////////////////////////
   def Controller(state: State,input:Input): State ={
-    printer()
+
     if (input.getValue()==null) {
       state.board = chess_board
       state
