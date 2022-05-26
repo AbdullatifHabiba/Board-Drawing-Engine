@@ -6,19 +6,20 @@ import scalafx.scene.Scene
 import scalafx.application.JFXApp3
 import scalafx.beans.property.StringProperty
 import scalafx.event.ActionEvent
+import scalafx.geometry.Insets
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.effect.BlendMode.{Blue, Green, Red}
-import scalafx.scene.image.Image
+import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.MouseEvent
-import scalafx.scene.layout.{Background, BackgroundFill, CornerRadii}
+import scalafx.scene.layout.{Background, BackgroundFill, BackgroundImage, BackgroundPosition, BackgroundRepeat, BackgroundSize, Border, CornerRadii, GridPane, Priority}
 import scalafx.scene.paint.Color
 import scalafx.scene.paint.Color.{Brown, Chocolate, Coral, DARKVIOLET, LightGray}
-import scalafx.scene.layout.GridPane
 import scalafx.scene.layout.GridPane.{getColumnIndex, getRowIndex}
-import scalafx.scene.layout.Priority
 import scalafx.scene.shape.{Circle, Rectangle}
 import scalafx.scene.text.Font
 import scalafx.scene.web.WebEvent.Alert
+
+import scala.reflect.internal.util.Collections
 
 class Engine {
   def engine(drawer: ((State, Input) => State, State, Input) => Array[Array[String]], controller: (State, Input) => State, state: State, input: Input): Array[Array[String]] = {
@@ -38,8 +39,7 @@ object play extends JFXApp3 {
 
     }
     val scene1 = new Scene(500, 500) {
-
-      fill =DARKVIOLET
+      fill = DARKVIOLET
 
 
       val chess = new Button("Chess") {
@@ -49,8 +49,6 @@ object play extends JFXApp3 {
 
       }
       chess.setPrefSize(200, 50)
-
-
 
 
       val checkers = new Button("Checker") {
@@ -88,8 +86,8 @@ object play extends JFXApp3 {
       Reset.setPrefSize(50, 30)
 
       val quiet = new Button("Quiet") {
-          layoutX = 350
-          layoutY = 450
+        layoutX = 350
+        layoutY = 450
 
         style = "-fx-background-color: red"
 
@@ -97,12 +95,7 @@ object play extends JFXApp3 {
       quiet.setPrefSize(50, 30)
       quiet.style = "-fx-background-color: red"
       quiet.onMouseClicked = { (e) => {
-        quiet.style = "-fx-background-color: blue"
 
-        content.foreach(p => {
-          p.disable = false
-          p.style = "-fx-background-color: gold"
-        })
         quiet.style = "-fx-background-color: red"
         Reset.style = "-fx-background-color: green"
 
@@ -155,7 +148,7 @@ object play extends JFXApp3 {
             count += 1
           }
         }
-        content = List(gridPane, label, input, ok,Reset,quiet)
+        content = List(gridPane, label, input, ok, Reset, quiet)
 
       }
 
@@ -177,14 +170,14 @@ object play extends JFXApp3 {
                 r.setPrefSize(50, 50)
                 if (count % 2 == 0) r.style = "-fx-background-color: black;" else r.style = "-fx-background-color: white;"
                 gridPane.add(r, j, i)
-                gridPane.layoutX = 50
-                gridPane.layoutY = 30
+
                 count += 1
               }
             }
           }
-
-          content = List(gridPane, label, input, ok,Reset,quiet)
+          gridPane.layoutX = 50
+          gridPane.layoutY = 30
+          content = List(gridPane, label, input, ok, Reset, quiet)
         }
         }
       }
@@ -211,7 +204,7 @@ object play extends JFXApp3 {
             count += 1
           }
         }
-        content = List(gridPane, label, input, ok,Reset,quiet)
+        content = List(gridPane, label, input, ok, Reset, quiet)
 
       }
 
@@ -240,7 +233,7 @@ object play extends JFXApp3 {
             }
           }
 
-          content = List(gridPane, label, input, ok,Reset,quiet)
+          content = List(gridPane, label, input, ok, Reset, quiet)
         }
         }
       }
@@ -248,14 +241,166 @@ object play extends JFXApp3 {
 
         quiet.style = "-fx-background-color: red"
         Reset.style = "-fx-background-color: green"
-        content = List(gridPane, label, input, ok,Reset,quiet)
+        content = List(gridPane, label, input, ok, Reset, quiet)
 
       }
+      }
+      var connect4: Connect4 = null;
+      connect.onAction = { (e) => {
+        connect4 = new Connect4()
+        stage.title = "Connect4"
+
+        stat = new State(6, 7, 1, true)
+        in = new Input(null)
+        if (!stat.getAction) println("error Action")
+        arr = engine.engine(connect4.Drawer, connect4.Controller, stat, in)
+        for (i <- 0 until 6) {
+          count += 1
+          for (j <- 0 until 7) {
+            val r = new Button()
+            r.setStyle(
+              "-fx-background-radius: 20em; " +
+                "-fx-min-width: 50px; " +
+                "-fx-min-height: 50px; " +
+                "-fx-max-width: 50px; " +
+                "-fx-max-height: 50px;" +
+                "-fx-background-color: white;"
+            );
+            r
+            //r.text = arr(i)(j)
+            gridPane.add(r, j, i)
+
+
+            count += 1
+          }
+        }
+        gridPane.layoutX = 60
+        gridPane.layoutY = 30
+        content = List(gridPane, label, input, ok, Reset, quiet)
+
+      }
+
+
+        ok.onMouseClicked = { (e) => {
+          stat = connect4.Controller(stat, in)
+          in = new Input(input.text.value)
+          if (!connect4.Controller(stat, in).getAction) println("Error Action")
+          else {
+            stat.setPlayer({
+              if (stat.getPlayer == 1) 2 else 1
+            })
+            print(stat.getPlayer)
+            arr = engine.engine(connect4.Drawer, connect4.Controller, stat, in)
+            //(arr.array)
+            for (i <- 0 until 6) {
+              count += 1
+              for (j <- 0 until 7) {
+                val r = new Button()
+               // r.text = arr(i)(j)
+                if (arr(i)(j) == "R") {
+                  r.setStyle(
+                    "-fx-background-radius: 20em; " +
+                      "-fx-min-width: 50px; " +
+                      "-fx-min-height: 50px; " +
+                      "-fx-max-width: 50px; " +
+                      "-fx-max-height: 50px;" +
+                      "-fx-background-color: red;"
+                  );
+                }else if (arr(i)(j) == "Y") {
+                  print(arr(i)(j))
+                  r.setStyle(
+                    "-fx-background-radius: 20em; " +
+                      "-fx-min-width: 50px; " +
+                      "-fx-min-height: 50px; " +
+                      "-fx-max-width: 50px; " +
+                      "-fx-max-height: 50px;" +
+                      "-fx-background-color: orange;"
+                  );
+                }
+                else {
+                  r.setStyle(
+                    "-fx-background-radius: 20em; " +
+                      "-fx-min-width: 50px; " +
+                      "-fx-min-height: 50px; " +
+                      "-fx-max-width: 50px; " +
+                      "-fx-max-height: 50px;" +
+                      "-fx-background-color: white;"
+                  );
+                }
+                gridPane.add(r, j, i)
+
+                count += 1
+              }
+            }
+          }
+
+          content = List(gridPane, label, input, ok, Reset, quiet)
+        }
+        }
+      }
+      var XO: TicTacToc = null;
+      TicTac.onAction = { (e) => {
+        XO = new TicTacToc()
+        stage.title = "TicTacTOC"
+        gridPane.layoutX = 60
+        stat = new State(3, 3, 1, true)
+        in = new Input(null)
+
+        if (!stat.getAction) println("error Action")
+        arr = engine.engine(XO.Drawer, XO.Controller, stat, in)
+        for (i <- 0 until 3) {
+          count += 1
+          for (j <- 0 until 3) {
+            val r = new Button()
+            r.setPrefSize(60, 60)
+            r.text = arr(i)(j)
+            gridPane.add(r, j, i)
+
+
+            count += 1
+          }
+        }
+        gridPane.layoutX = 150
+        gridPane.layoutY = 150
+        content = List(gridPane, label, input, ok, Reset, quiet)
+
+      }
+
+
+        ok.onMouseClicked = { (e) => {
+          stat = XO.Controller(stat, in)
+          in = new Input(input.text.value)
+          //print("innnn")
+          if (!XO.Controller(stat, in).getAction) println("Error Action")
+          else {
+            stat.setPlayer({
+              if (stat.getPlayer == 1) 2 else 1
+            })
+            arr = engine.engine(XO.Drawer, XO.Controller, stat, in)
+            //(arr.array)
+            for (i <- 0 until 3) {
+              count += 1
+              for (j <- 0 until 3) {
+                val r = new Button()
+                r.text = arr(i)(j)
+                r.setPrefSize(60, 60)
+                gridPane.add(r, j, i)
+
+                count += 1
+              }
+            }
+          }
+          gridPane.layoutX = 150
+          gridPane.layoutY = 150
+          content = List(gridPane, label, input, ok, Reset, quiet)
+        }
+        }
       }
     }
-    stage.scene = scene1
+      stage.scene = scene1
+    }
+
+
   }
 
-
-}
 

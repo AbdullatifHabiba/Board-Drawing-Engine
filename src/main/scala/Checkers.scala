@@ -48,7 +48,7 @@ class Checkers {
   def Controller(state: State, input: Input): State = {
     if (input.getValue() == null) {
       state.board = initialBoard
-      return state
+       state
     }
     var move: Array[String] = input.getValue().split(",")
     println(s"length of move ${move.length}")
