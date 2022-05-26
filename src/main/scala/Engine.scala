@@ -143,7 +143,7 @@ object play extends JFXApp3 {
           count += 1
           for (j <- 0 until 8) {
             val r = new Button()
-            r.text = arr(7 - i)(7 - j)
+            r.text = printer(arr(7 - i)(7 - j))
             r.setPrefSize(50, 50)
             if (count % 2 == 0) r.style = "-fx-background-color: black;" else r.style = "-fx-background-color: white;"
             gridPane.add(r, j, i)
@@ -169,7 +169,7 @@ object play extends JFXApp3 {
               count += 1
               for (j <- 0 until 8) {
                 val r = new Button()
-                r.text = arr(7 - i)(7 - j)
+                r.text = printer(arr(i)(j))
                 r.setPrefSize(50, 50)
                 if (count % 2 == 0) r.style = "-fx-background-color: black;" else r.style = "-fx-background-color: white;"
                 gridPane.add(r, j, i)
@@ -429,7 +429,26 @@ object play extends JFXApp3 {
     }
       stage.scene = scene1
     }
-
+  def printer (char:String): String ={
+    var  sh:String=" ";
+    char match {
+      case "R" =>  sh=Character.toString(9814)
+      case "N" =>  sh=Character.toString(9816)
+      case "B" =>  sh=Character.toString(9815)
+      case "Q" =>  sh= Character.toString(9813)
+      case "K" =>  sh=Character.toString(9812)
+      case "P" =>  sh=Character.toString(9817)
+      case "r" =>  sh=Character.toString(9820)
+      case "n" =>  sh=Character.toString(9822)
+      case "b" =>  sh=Character.toString(9821)
+      case "q" =>  sh=Character.toString(9819)
+      case "k" =>  sh=Character.toString(9818)
+      case "p" =>  sh=Character.toString(9823)
+      case   _ =>  sh="  "
+    }
+    //print(sh)
+    sh
+  }
 
   }
 

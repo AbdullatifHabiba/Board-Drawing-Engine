@@ -56,8 +56,7 @@ class chess{
       println("")
       print( i+"   ")
       for(j<- 0 to 7 ) {
-            chess_printer(i)(j)=printer(chess_printer(i)(j))
-                print(chess_printer(i)(j)+"  ")
+                print(printer(chess_printer(i)(j))+"  ")
 
       }
     }
@@ -68,9 +67,15 @@ chess_printer
 
   //////////////////////////////////// Control Function ///////////////////////////////////
   def Controller(state: State,input:Input): State ={
+      println(input.getValue())
+
 
     if (input.getValue()==null) {
       state.board = chess_board
+
+      for (i<- 0 until 8)
+        for (j <- 0 until 8)
+           {print(state.board(i)(j))}
       state
     }
     else {
@@ -114,7 +119,7 @@ chess_printer
               chess_board.apply(rank_2).update(file_2, chess_board(rank_1)(file_1))
               chess_board.apply(rank_1).update(file_1, temp_board(rank_1 % 2)(file_1))
               state.board = chess_board
-              state.setPlayer(state.getPlayer)
+             // state.setPlayer(state.getPlayer)
             }
             else {
               println("Your piece is still under attack")
