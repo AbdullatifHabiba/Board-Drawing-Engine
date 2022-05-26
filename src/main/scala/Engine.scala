@@ -35,7 +35,7 @@ object play extends JFXApp3 {
     var engine = new Engine()
 
     stage = new JFXApp3.PrimaryStage {
-      title = "Engine games"
+      title = "Engine Games"
 
     }
     val scene1 = new Scene(500, 500) {
@@ -98,6 +98,11 @@ object play extends JFXApp3 {
 
         quiet.style = "-fx-background-color: red"
         Reset.style = "-fx-background-color: green"
+       stage.title = "Engine Games"
+        TicTac.cancelButton=true
+        checkers.cancelButton=true
+        connect.cancelButton=true
+        chess.cancelButton=true
 
         content = List(chess, checkers, connect, TicTac)
       }
@@ -139,7 +144,6 @@ object play extends JFXApp3 {
           for (j <- 0 until 8) {
             val r = new Button()
             r.text = arr(7 - i)(7 - j)
-            // r.style = "-fx-font: 30 arial;"
             r.setPrefSize(50, 50)
             if (count % 2 == 0) r.style = "-fx-background-color: black;" else r.style = "-fx-background-color: white;"
             gridPane.add(r, j, i)
@@ -161,7 +165,6 @@ object play extends JFXApp3 {
               if (stat.getPlayer == 1) 2 else 1
             })
             arr = engine.engine(chessObj.Drawer, chessObj.Controller, stat, in)
-            //  print(arr.array)
             for (i <- 0 until 8) {
               count += 1
               for (j <- 0 until 8) {
@@ -188,7 +191,6 @@ object play extends JFXApp3 {
         in = new Input(null)
         if (!stat.getAction) println("error Action")
         arr = engine.engine(checker.Drawer, checker.Controller, stat, in)
-        val s = 100
         for (i <- 0 until 8) {
           count += 1
           for (j <- 0 until 8) {
@@ -196,8 +198,32 @@ object play extends JFXApp3 {
 
             r.setPrefSize(50, 50)
             if (count % 2 == 0) r.style = "-fx-background-color: black;-fx-font: 20 arial;" else r.style = "-fx-background-color: white;-fx-font: 20 arial;"
-            r.text = arr(i)(j)
 
+              /*   if(arr(i)(j)=="x")
+                    {
+                      r.setStyle(
+                        "-fx-background-radius: 20em; " +
+                          "-fx-min-width: 40px; " +
+                          "-fx-min-height: 40px; " +
+                          "-fx-max-width: 40px; " +
+                          "-fx-max-height: 40px;" +
+                          "-fx-background-color: black;-fx-border-width:5px;-fx-border-color:white;"
+
+                      );
+                    }
+                  if(arr(i)(j)=="o"){
+                    r.setStyle(
+                      "-fx-background-radius: 20em; " +
+                        "-fx-min-width: 40px; " +
+                        "-fx-min-height: 40px; " +
+                        "-fx-max-width: 40px; " +
+                        "-fx-max-height: 40px;" +
+                        "-fx-background-color: white;"
+
+                    );
+                 }*/
+            r.text = arr(i)(j)
+            gridPane.style="-fx-border-width:10px;-fx-border-color:black;-fx-background-color: black;"
             gridPane.add(r, j, i)
 
 
@@ -209,14 +235,14 @@ object play extends JFXApp3 {
       }
 
         ok.onMouseClicked = { (e) => {
-          stat = checker.Controller(stat, in)
           in = new Input(input.text.value)
+
           if (!checker.Controller(stat, in).getAction) println("Error Action")
           else {
-            stat.setPlayer({
-              if (stat.getPlayer == 1) 2 else 1
-            })
+
             arr = engine.engine(checker.Drawer, checker.Controller, stat, in)
+            stat = checker.Controller(stat, in)
+
             //(arr.array)
             for (i <- 0 until 8) {
               count += 1
@@ -231,6 +257,9 @@ object play extends JFXApp3 {
                 count += 1
               }
             }
+            stat.setPlayer({
+              if (stat.getPlayer == 1) 2 else 1
+            })
           }
 
           content = List(gridPane, label, input, ok, Reset, quiet)
@@ -266,7 +295,7 @@ object play extends JFXApp3 {
                 "-fx-max-height: 50px;" +
                 "-fx-background-color: white;"
             );
-            r
+
             //r.text = arr(i)(j)
             gridPane.add(r, j, i)
 
@@ -368,7 +397,6 @@ object play extends JFXApp3 {
 
 
         ok.onMouseClicked = { (e) => {
-          stat = XO.Controller(stat, in)
           in = new Input(input.text.value)
           //print("innnn")
           if (!XO.Controller(stat, in).getAction) println("Error Action")
@@ -377,6 +405,8 @@ object play extends JFXApp3 {
               if (stat.getPlayer == 1) 2 else 1
             })
             arr = engine.engine(XO.Drawer, XO.Controller, stat, in)
+            stat = XO.Controller(stat, in)
+
             //(arr.array)
             for (i <- 0 until 3) {
               count += 1

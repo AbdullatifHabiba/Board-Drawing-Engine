@@ -23,7 +23,7 @@ class chess{
     Array("j", "i", "j", "i", "j", "i", "j", "i"),
     Array("i", "j", "i", "j", "i", "j", "i","j")
   )
-  var chess_printer:Array[Array[String]] =  Array.ofDim[String](8,8)
+ // var chess_printer:Array[Array[String]] =  Array.ofDim[String](8,8)
   def printer (char:String): String ={
              var  sh:String=" ";
         char match {

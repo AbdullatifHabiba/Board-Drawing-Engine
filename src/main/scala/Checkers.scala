@@ -23,8 +23,8 @@ class Checkers {
 
   var board: Array[Array[String]] = Array.ofDim[String](8, 8)
 
-  def Drawer(controller: (State,Input)=>State, state: State,input:Input): Array[Array[String]]  = {
-    board = controller.apply(state,input).board;
+  def Drawer(controller: (State, Input) => State, state: State, input: Input): Array[Array[String]] = {
+    board = controller.apply(state, input).board;
     var i = 0 to 7
     i.foreach(i => print(board(0)(i)))
     println("")
@@ -48,21 +48,25 @@ class Checkers {
   def Controller(state: State, input: Input): State = {
     if (input.getValue() == null) {
       state.board = initialBoard
-       state
+      return state
     }
     var move: Array[String] = input.getValue().split(",")
-    println(s"length of move ${move.length}")
-    var player = state.getPlayer
+    var player = state.getPlayer - 1
     board = state.board
     if (player == 0) {
       if (!isWhite(move(0)) || move.length > 4) {
         state.setAction(false)
+        println("Error2")
+        println(s"${isWhite(move(0))}")
         return state
       }
       var i = 0;
       do {
-        if (!moveWhite(move(i), move(i + 1))) {
+        var x1 = getPosition(move(i))._1
+        var x2 = getPosition(move(i + 1))._1
+        if (!moveWhite(move(i), move(i + 1)) || (move.length > 2 && math.abs(x2 - x1) != 2)) {
           state.setAction(false)
+          println("Error2")
           return state
         }
         i += 1
@@ -70,29 +74,33 @@ class Checkers {
     } else {
       if (!isBlack(move(0)) || move.length > 4) {
         state.setAction(false)
+        println("Error3")
         return state
       }
       var i = 0;
       do {
         if (!moveBlack(move(i), move(i + 1))) {
           state.setAction(false)
+          println("Error4")
           return state
         }
         i += 1
       } while (i < move.length - 1)
     }
     state.board = this.board
+    state.setAction(true)
     state
   }
 
   def getPosition(move: String): (Int, Int) = {
     var y: Int = 0
-    if (move.charAt(0).toInt >= 1 &&
-      move.charAt(0).toInt <= 8 &&
-      move.charAt(1).compareTo('A') >= 0 &&
-      move.charAt(1).compareTo('H') <= 0
-    )
+    if (!(move.substring(0, 1).toInt >= 1 &&
+      move.substring(0, 1).toInt <= 8 &&
+      move.substring(1, 2).compareTo("A") >= 0 &&
+      move.substring(1, 2).compareTo("H") <= 0)
+    ) {
       return (-1, -1)
+    }
     move.charAt(1) match {
       case 'A' => y = 0
       case 'B' => y = 1
@@ -109,6 +117,7 @@ class Checkers {
 
   def isWhite(move: String): Boolean = {
     var (x, y) = getPosition(move)
+    println((x, y))
     if (x == -1) return false
     board(x)(y) match {
       case "O" => true
@@ -151,13 +160,13 @@ class Checkers {
       return false
     }
     if (math.abs(x2 - x1) == 1) {
-      board(x2)(y2) = "o"
+      board(x2)(y2) = board(x1)(y1)
       board(x1)(y1) = " "
     } else {
       if (board((x1 + x2) / 2)((y1 + y2) / 2).equalsIgnoreCase("x") ||
         (board((x1 + x2) / 2)((y1 + y2) / 2).equalsIgnoreCase("X") && isPromomted(first))) {
         board((x1 + x2) / 2)((y1 + y2) / 2) = " "
-        board(x2)(y2) = "o"
+        board(x2)(y2) = board(x1)(y1)
         board(x1)(y1) = " "
       }
     }
@@ -179,13 +188,13 @@ class Checkers {
       return false
     }
     if (math.abs(x2 - x1) == 1) {
-      board(x2)(y2) = "x"
+      board(x2)(y2) = board(x1)(y1)
       board(x1)(y1) = " "
     } else {
       if (board((x1 + x2) / 2)((y1 + y2) / 2).equalsIgnoreCase("o") ||
         (board((x1 + x2) / 2)((y1 + y2) / 2).equalsIgnoreCase("O") && isPromomted(first))) {
         board((x1 + x2) / 2)((y1 + y2) / 2) = " "
-        board(x2)(y2) = "x"
+        board(x2)(y2) = board(x1)(y1)
         board(x1)(y1) = " "
       }
     }
