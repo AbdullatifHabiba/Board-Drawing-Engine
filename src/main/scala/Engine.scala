@@ -85,7 +85,7 @@ object play extends JFXApp3 {
       }
       Reset.setPrefSize(50, 30)
 
-      val quiet = new Button("Quiet") {
+      val quiet = new Button("Quit") {
         layoutX = 350
         layoutY = 450
 
@@ -134,16 +134,17 @@ object play extends JFXApp3 {
       var in: Input = null
       chess.onAction = { (e) => {
         chessObj = new chess()
+        stage.title = "Chess"
+
         stat = new State(8, 8, 1, true)
         in = new Input(null)
         if (!stat.getAction) println("error Action")
         arr = engine.engine(chessObj.Drawer, chessObj.Controller, stat, in)
-        val s = 100 // side of rectangle
         for (i <- 0 until 8) {
           count += 1
           for (j <- 0 until 8) {
             val r = new Button()
-            r.text = printer(arr(7 - i)(7 - j))
+            r.text = printer(arr(i)(j))
             r.setPrefSize(50, 50)
             if (count % 2 == 0) r.style = "-fx-background-color: black;" else r.style = "-fx-background-color: white;"
             gridPane.add(r, j, i)
@@ -187,6 +188,8 @@ object play extends JFXApp3 {
       var checker: Checkers = null;
       checkers.onAction = { (e) => {
         checker = new Checkers()
+        stage.title = "Checkers"
+
         stat = new State(8, 8, 1, true)
         in = new Input(null)
         if (!stat.getAction) println("error Action")
@@ -199,29 +202,7 @@ object play extends JFXApp3 {
             r.setPrefSize(50, 50)
             if (count % 2 == 0) r.style = "-fx-background-color: black;-fx-font: 20 arial;" else r.style = "-fx-background-color: white;-fx-font: 20 arial;"
 
-              /*   if(arr(i)(j)=="x")
-                    {
-                      r.setStyle(
-                        "-fx-background-radius: 20em; " +
-                          "-fx-min-width: 40px; " +
-                          "-fx-min-height: 40px; " +
-                          "-fx-max-width: 40px; " +
-                          "-fx-max-height: 40px;" +
-                          "-fx-background-color: black;-fx-border-width:5px;-fx-border-color:white;"
 
-                      );
-                    }
-                  if(arr(i)(j)=="o"){
-                    r.setStyle(
-                      "-fx-background-radius: 20em; " +
-                        "-fx-min-width: 40px; " +
-                        "-fx-min-height: 40px; " +
-                        "-fx-max-width: 40px; " +
-                        "-fx-max-height: 40px;" +
-                        "-fx-background-color: white;"
-
-                    );
-                 }*/
             r.text = arr(i)(j)
             gridPane.style="-fx-border-width:10px;-fx-border-color:black;-fx-background-color: black;"
             gridPane.add(r, j, i)
@@ -243,7 +224,6 @@ object play extends JFXApp3 {
             arr = engine.engine(checker.Drawer, checker.Controller, stat, in)
             stat = checker.Controller(stat, in)
 
-            //(arr.array)
             for (i <- 0 until 8) {
               count += 1
               for (j <- 0 until 8) {
@@ -432,18 +412,18 @@ object play extends JFXApp3 {
   def printer (char:String): String ={
     var  sh:String=" ";
     char match {
-      case "R" =>  sh=Character.toString(9814)
-      case "N" =>  sh=Character.toString(9816)
-      case "B" =>  sh=Character.toString(9815)
-      case "Q" =>  sh= Character.toString(9813)
-      case "K" =>  sh=Character.toString(9812)
-      case "P" =>  sh=Character.toString(9817)
-      case "r" =>  sh=Character.toString(9820)
-      case "n" =>  sh=Character.toString(9822)
-      case "b" =>  sh=Character.toString(9821)
-      case "q" =>  sh=Character.toString(9819)
-      case "k" =>  sh=Character.toString(9818)
-      case "p" =>  sh=Character.toString(9823)
+      case "r" =>  sh=Character.toString(9814)
+      case "n" =>  sh=Character.toString(9816)
+      case "b" =>  sh=Character.toString(9815)
+      case "q" =>  sh= Character.toString(9813)
+      case "k" =>  sh=Character.toString(9812)
+      case "p" =>  sh=Character.toString(9817)
+      case "R" =>  sh=Character.toString(9820)
+      case "N" =>  sh=Character.toString(9822)
+      case "B" =>  sh=Character.toString(9821)
+      case "Q" =>  sh=Character.toString(9819)
+      case "K" =>  sh=Character.toString(9818)
+      case "P" =>  sh=Character.toString(9823)
       case   _ =>  sh="  "
     }
     //print(sh)
